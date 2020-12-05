@@ -6,4 +6,5 @@
 *.java      eol=lf
 *.sh        eol=lf
 
+# JS识别为Java
 *.js linguist-language=java
