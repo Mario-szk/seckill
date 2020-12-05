@@ -1,13 +1,23 @@
 package com.jerusalem.seckill.service;
 
-/**
- * Created by hzllb on 2019/2/16.
+/****
+ * 本地热点缓存操作接口
+ * @author jerusalem
+ * @date 2020-04-20 15:28:19
  */
-//封装本地缓存操作类
 public interface CacheService {
-    //存方法
+
+    /***
+     * 存值方法
+     * @param key
+     * @param value
+     */
     void setCommonCache(String key, Object value);
 
-    //取方法
+    /***
+     * 取值方法
+     * @param key
+     * @return
+     */
     Object getFromCommonCache(String key);
 }
