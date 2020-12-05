@@ -1,8 +1,4 @@
-package com.jerusalem.seckill.util;
-
-/**
- * Created by hzllb on 2019/3/9.
- */
+package com.jerusalem.seckill.utils;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,6 +13,12 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+/****
+ *
+ * @author jerusalem
+ * @email 3276586184@qq.com
+ * @date 2020-04-18 12:01:59
+ */
 public class CodeUtil {
     private static int width = 90;// 定义图片的width
     private static int height = 20;// 定义图片的height
@@ -44,16 +46,13 @@ public class CodeUtil {
         // 将图像填充为白色
         gd.setColor(Color.WHITE);
         gd.fillRect(0, 0, width, height);
-
         // 创建字体，字体的大小应该根据图片的高度来定。
         Font font = new Font("Fixedsys", Font.BOLD, fontHeight);
         // 设置字体。
         gd.setFont(font);
-
-        // 画边框。
+        // 画边框
         gd.setColor(Color.BLACK);
         gd.drawRect(0, 0, width - 1, height - 1);
-
         // 随机产生40条干扰线，使图象中的认证码不易被其它程序探测到。
         gd.setColor(Color.BLACK);
         for (int i = 0; i < 30; i++) {
@@ -63,11 +62,9 @@ public class CodeUtil {
             int yl = random.nextInt(12);
             gd.drawLine(x, y, x + xl, y + yl);
         }
-
         // randomCode用于保存随机产生的验证码，以便用户登录后进行验证。
         StringBuffer randomCode = new StringBuffer();
         int red = 0, green = 0, blue = 0;
-
         // 随机产生codeCount数字的验证码。
         for (int i = 0; i < codeCount; i++) {
             // 得到随机产生的验证码数字。
@@ -76,11 +73,9 @@ public class CodeUtil {
             red = random.nextInt(255);
             green = random.nextInt(255);
             blue = random.nextInt(255);
-
             // 用随机产生的颜色将验证码绘制到图像中。
             gd.setColor(new Color(red, green, blue));
             gd.drawString(code, (i + 1) * xx, codeY);
-
             // 将产生的四个随机数组合在一起。
             randomCode.append(code);
         }

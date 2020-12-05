@@ -2,8 +2,8 @@ package com.jerusalem.seckill.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.jerusalem.seckill.serializer.JodaDateTimeJsonDeserializer;
-import com.jerusalem.seckill.serializer.JodaDateTimeJsonSerializer;
+import com.jerusalem.seckill.utils.JodaDateTimeJsonDeserializer;
+import com.jerusalem.seckill.utils.JodaDateTimeJsonSerializer;
 import org.joda.time.DateTime;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

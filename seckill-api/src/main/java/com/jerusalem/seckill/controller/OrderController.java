@@ -9,10 +9,9 @@ import com.jerusalem.seckill.error.EmBusinessError;
 import com.jerusalem.seckill.response.CommonReturnType;
 import com.jerusalem.seckill.service.PromoService;
 import com.jerusalem.seckill.model.UserModel;
-import com.jerusalem.seckill.util.CodeUtil;
+import com.jerusalem.seckill.utils.CodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
