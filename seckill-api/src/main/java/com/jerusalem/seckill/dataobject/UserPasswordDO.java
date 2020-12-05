@@ -11,7 +11,7 @@ public class UserPasswordDO {
     private String encrptPassword;
     private Integer userId;
 
-    
+
     public Integer getId() {
         return id;
     }

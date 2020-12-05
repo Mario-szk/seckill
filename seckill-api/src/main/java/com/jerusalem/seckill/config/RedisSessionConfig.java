@@ -14,7 +14,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 import org.springframework.stereotype.Component;
 
 /****
- * 基于Redis实现分布式会话管理
+ * 自定义RedisTemplate配置
  * @author jerusalem
  * @email 3276586184@qq.com
  * @date 2020-04-17 16:28:19
@@ -27,10 +27,10 @@ public class RedisSessionConfig {
     public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory){
         RedisTemplate redisTemplate = new RedisTemplate();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
-        //解决key的序列化方式
+        //解决key的序列化方式 -> String
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         redisTemplate.setKeySerializer(stringRedisSerializer);
-        //解决value的序列化方式
+        //解决value的序列化方式 -> Json
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
         ObjectMapper objectMapper =  new ObjectMapper();
         SimpleModule simpleModule = new SimpleModule();
