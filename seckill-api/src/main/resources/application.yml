@@ -1,0 +1,30 @@
+server:
+  port: 8090
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    name: seckill
+    url: jdbc:mysql://192.168.75.136:3306/seckill?useUnicode=true&characterEncoding=UTF-8&useSSL=true
+    username: root
+    password: 123456
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  redis:
+    host: 192.168.75.140
+    port: 6379
+    #设置jedis连接池
+    jedis:
+      pool:
+        max-active: 50
+        min-idle: 20
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+
+#rocketmq:
+#  nameserver:
+#    addr: 192.168.75.150:9876
+#  topicname: TopicTest
