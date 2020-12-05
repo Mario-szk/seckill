@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.*;
 
 import com.jerusalem.seckill.service.ItemService;
 
-/**
- * Created by hzllb on 2018/11/18.
+/****
+ * 商品控制器
+ * @author jerusalem
+ * @date 2020-04-17 16:28:19
  */
-@Controller("/item")
+@RestController("/item")
 @RequestMapping("/item")
 @CrossOrigin(origins = {"*"},allowCredentials = "true")
 public class ItemController extends BaseController {
@@ -40,48 +42,57 @@ public class ItemController extends BaseController {
     @Autowired
     private PromoService promoService;
 
-    //创建商品的controller
-    @RequestMapping(value = "/create",method = {RequestMethod.POST},consumes={CONTENT_TYPE_FORMED})
-    @ResponseBody
+    /***
+     * 创建商品
+     * @param title
+     * @param description
+     * @param price
+     * @param stock
+     * @param imgUrl
+     * @return
+     * @throws BusinessException
+     */
+    @PostMapping(value = "/create",consumes={CONTENT_TYPE_FORMED})
     public CommonReturnType createItem(@RequestParam(name = "title")String title,
                                        @RequestParam(name = "description")String description,
                                        @RequestParam(name = "price")BigDecimal price,
                                        @RequestParam(name = "stock")Integer stock,
                                        @RequestParam(name = "imgUrl")String imgUrl) throws BusinessException {
-        //封装service请求用来创建商品
         ItemModel itemModel = new ItemModel();
         itemModel.setTitle(title);
         itemModel.setDescription(description);
         itemModel.setPrice(price);
         itemModel.setStock(stock);
         itemModel.setImgUrl(imgUrl);
-
         ItemModel itemModelForReturn = itemService.createItem(itemModel);
         ItemVO itemVO = convertVOFromModel(itemModelForReturn);
-
         return CommonReturnType.create(itemVO);
     }
 
-    @RequestMapping(value = "/publishpromo",method = {RequestMethod.GET})
-    @ResponseBody
+    /***
+     * 获取秒杀商品
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/publishpromo")
     public CommonReturnType publishpromo(@RequestParam(name = "id")Integer id){
         promoService.publishPromo(id);
         return CommonReturnType.create(null);
-
     }
-    //商品详情页浏览
-    @RequestMapping(value = "/get",method = {RequestMethod.GET})
-    @ResponseBody
+
+    /***
+     * 获取商品详情页
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/get")
     public CommonReturnType getItem(@RequestParam(name = "id")Integer id){
         ItemModel itemModel = null;
-
         //先取本地缓存
         itemModel = (ItemModel) cacheService.getFromCommonCache("item_"+id);
-
         if(itemModel == null){
             //根据商品的id到redis内获取
             itemModel = (ItemModel) redisTemplate.opsForValue().get("item_"+id);
-
             //若redis内不存在对应的itemModel,则访问下游service
             if(itemModel == null){
                 itemModel = itemService.getItemById(id);
@@ -92,20 +103,17 @@ public class ItemController extends BaseController {
             //填充本地缓存
             cacheService.setCommonCache("item_"+id,itemModel);
         }
-
-
         ItemVO itemVO = convertVOFromModel(itemModel);
-
         return CommonReturnType.create(itemVO);
-
     }
 
-    //商品列表页面浏览
-    @RequestMapping(value = "/list",method = {RequestMethod.GET})
-    @ResponseBody
+    /***
+     * 商品列表
+     * @return
+     */
+    @GetMapping(value = "/list")
     public CommonReturnType listItem(){
         List<ItemModel> itemModelList = itemService.listItem();
-
         //使用stream apiJ将list内的itemModel转化为ITEMVO;
         List<ItemVO> itemVOList =  itemModelList.stream().map(itemModel -> {
             ItemVO itemVO = this.convertVOFromModel(itemModel);
@@ -113,8 +121,6 @@ public class ItemController extends BaseController {
         }).collect(Collectors.toList());
         return CommonReturnType.create(itemVOList);
     }
-
-
 
 
     private ItemVO convertVOFromModel(ItemModel itemModel){

@@ -1,7 +1,9 @@
 package com.jerusalem.seckill.controller;
 
-/**
- * Created by hzllb on 2018/11/14.
+/****
+ *
+ * @author jerusalem
+ * @date 2020-04-15 12:28:12
  */
 public class BaseController {
     public static final String CONTENT_TYPE_FORMED="application/x-www-form-urlencoded";

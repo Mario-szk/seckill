@@ -16,8 +16,11 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.jerusalem.seckill.response.CommonReturnType;
 
-/**
- * Created by hzllb on 2018/12/22.
+/****
+ * 全局异常处理器
+ * @author jerusalem
+ * @email 3276586184@qq.com
+ * @date 2020-04-17 16:05:36
  */
 @ControllerAdvice
 public class GlobalExceptionHandler{
