@@ -18,8 +18,10 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by hzllb on 2018/11/18.
+/****
+ * 活动接口实现
+ * @author jerusalem
+ * @date 2020-04-20 15:30:29
  */
 @Service
 public class PromoServiceImpl implements PromoService {

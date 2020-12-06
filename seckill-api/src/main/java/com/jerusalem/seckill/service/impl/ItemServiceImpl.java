@@ -28,8 +28,10 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-/**
- * Created by hzllb on 2018/11/18.
+/****
+ * 商品接口实现
+ * @author jerusalem
+ * @date 2020-04-20 15:30:29
  */
 @Service
 public class ItemServiceImpl implements ItemService {

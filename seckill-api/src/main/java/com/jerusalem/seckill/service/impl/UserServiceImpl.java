@@ -21,8 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by hzllb on 2018/11/11.
+/****
+ * 用户接口实现
+ * @author jerusalem
+ * @date 2020-04-20 15:30:29
  */
 @Service
 public class UserServiceImpl implements UserService {

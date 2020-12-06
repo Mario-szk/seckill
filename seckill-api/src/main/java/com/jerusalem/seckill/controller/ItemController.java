@@ -122,7 +122,11 @@ public class ItemController extends BaseController {
         return CommonReturnType.create(itemVOList);
     }
 
-
+    /***
+     * 商品模型转换为商品实体
+     * @param itemModel
+     * @return
+     */
     private ItemVO convertVOFromModel(ItemModel itemModel){
         if(itemModel == null){
             return null;

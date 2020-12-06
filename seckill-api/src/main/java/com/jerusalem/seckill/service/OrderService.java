@@ -6,7 +6,7 @@ import com.jerusalem.seckill.model.OrderModel;
 /****
  * 订单、交易接口
  * @author jerusalem
- * @date 2020-04-21 14:11:29
+ * @date 2020-04-19 13:44:19
  */
 public interface OrderService {
 
