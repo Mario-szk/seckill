@@ -25,8 +25,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Created by hzllb on 2018/11/18.
+/****
+ * 订单、交易接口实现
+ * @author jerusalem
+ * @date 2020-04-21 14:12:08
  */
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -47,6 +49,16 @@ public class OrderServiceImpl implements OrderService {
     private StockLogDOMapper stockLogDOMapper;
 
 
+    /***
+     * 创建订单
+     * @param userId
+     * @param itemId
+     * @param promoId
+     * @param amount
+     * @param stockLogId
+     * @return
+     * @throws BusinessException
+     */
     @Override
     @Transactional
     public OrderModel createOrder(Integer userId, Integer itemId, Integer promoId, Integer amount,String stockLogId) throws BusinessException {
@@ -56,8 +68,6 @@ public class OrderServiceImpl implements OrderService {
         if(itemModel == null){
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"商品信息不存在");
         }
-
-//
 //        UserModel userModel = userService.getUserByIdInCache(userId);
 //        if(userModel == null){
 //            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"用户信息不存在");
@@ -65,7 +75,6 @@ public class OrderServiceImpl implements OrderService {
         if(amount <= 0 || amount > 99){
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"数量信息不正确");
         }
-
         //校验活动信息
 //        if(promoId != null){
 //            //（1）校验对应活动是否存在这个适用商品
@@ -76,13 +85,11 @@ public class OrderServiceImpl implements OrderService {
 //                throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"活动信息还未开始");
 //            }
 //        }
-
         //2.落单减库存
         boolean result = itemService.decreaseStock(itemId,amount);
         if(!result){
             throw new BusinessException(EmBusinessError.STOCK_NOT_ENOUGH);
         }
-
         //3.订单入库
         OrderModel orderModel = new OrderModel();
         orderModel.setUserId(userId);
@@ -95,15 +102,12 @@ public class OrderServiceImpl implements OrderService {
         }
         orderModel.setPromoId(promoId);
         orderModel.setOrderPrice(orderModel.getItemPrice().multiply(new BigDecimal(amount)));
-
         //生成交易流水号,订单号
         orderModel.setId(generateOrderNo());
         OrderDO orderDO = convertFromOrderModel(orderModel);
         orderDOMapper.insertSelective(orderDO);
-
         //加上商品的销量
         itemService.increaseSales(itemId,amount);
-
         //设置库存流水状态为成功
         StockLogDO stockLogDO = stockLogDOMapper.selectByPrimaryKey(stockLogId);
         if(stockLogDO == null){
@@ -111,7 +115,6 @@ public class OrderServiceImpl implements OrderService {
         }
         stockLogDO.setStatus(2);
         stockLogDOMapper.updateByPrimaryKeySelective(stockLogDO);
-
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
                 @Override
                 public void afterCommit(){
@@ -124,14 +127,14 @@ public class OrderServiceImpl implements OrderService {
                 }
 
         });
-
-
-
         //4.返回前端
         return orderModel;
     }
 
-
+    /***
+     * 生成订单号
+     * @return
+     */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     private String generateOrderNo(){
         //订单号有16位
@@ -140,7 +143,6 @@ public class OrderServiceImpl implements OrderService {
         LocalDateTime now = LocalDateTime.now();
         String nowDate = now.format(DateTimeFormatter.ISO_DATE).replace("-","");
         stringBuilder.append(nowDate);
-
         //中间6位为自增序列
         //获取当前sequence
         int sequence = 0;
@@ -153,13 +155,17 @@ public class OrderServiceImpl implements OrderService {
             stringBuilder.append(0);
         }
         stringBuilder.append(sequenceStr);
-
-
         //最后2位为分库分表位,暂时写死
         stringBuilder.append("00");
-
         return stringBuilder.toString();
     }
+
+    /***
+     * 抽取的私有方法
+     * 订单实体转换为订单领域模型
+     * @param orderModel
+     * @return
+     */
     private OrderDO convertFromOrderModel(OrderModel orderModel){
         if(orderModel == null){
             return null;
