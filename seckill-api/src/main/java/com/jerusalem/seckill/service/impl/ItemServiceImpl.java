@@ -57,6 +57,11 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private StockLogDOMapper stockLogDOMapper;
 
+    /***
+     * 将商品模型转换为商品实体
+     * @param itemModel
+     * @return
+     */
     private ItemDO convertItemDOFromItemModel(ItemModel itemModel){
         if(itemModel == null){
             return null;
@@ -66,6 +71,12 @@ public class ItemServiceImpl implements ItemService {
         itemDO.setPrice(itemModel.getPrice().doubleValue());
         return itemDO;
     }
+
+    /***
+     * 将商品模型转换为商品库存关联实体
+     * @param itemModel
+     * @return
+     */
     private ItemStockDO convertItemStockDOFromItemModel(ItemModel itemModel){
         if(itemModel == null){
             return null;
@@ -76,6 +87,12 @@ public class ItemServiceImpl implements ItemService {
         return itemStockDO;
     }
 
+    /***
+     * 创建商品项
+     * @param itemModel
+     * @return
+     * @throws BusinessException
+     */
     @Override
     @Transactional
     public ItemModel createItem(ItemModel itemModel) throws BusinessException {
@@ -84,22 +101,21 @@ public class ItemServiceImpl implements ItemService {
         if(result.isHasErrors()){
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,result.getErrMsg());
         }
-
         //转化itemmodel->dataobject
         ItemDO itemDO = this.convertItemDOFromItemModel(itemModel);
-
         //写入数据库
         itemDOMapper.insertSelective(itemDO);
         itemModel.setId(itemDO.getId());
-
         ItemStockDO itemStockDO = this.convertItemStockDOFromItemModel(itemModel);
-
         itemStockDOMapper.insertSelective(itemStockDO);
-
         //返回创建完成的对象
         return this.getItemById(itemModel.getId());
     }
 
+    /***
+     * 展示商品列表
+     * @return
+     */
     @Override
     public List<ItemModel> listItem() {
         List<ItemDO> itemDOList = itemDOMapper.listItem();
@@ -111,6 +127,11 @@ public class ItemServiceImpl implements ItemService {
         return itemModelList;
     }
 
+    /***
+     * 根据id获取商品详情
+     * @param id
+     * @return
+     */
     @Override
     public ItemModel getItemById(Integer id) {
         ItemDO itemDO = itemDOMapper.selectByPrimaryKey(id);
@@ -119,11 +140,8 @@ public class ItemServiceImpl implements ItemService {
         }
         //操作获得库存数量
         ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemDO.getId());
-
-
         //将dataobject->model
         ItemModel itemModel = convertModelFromDataObject(itemDO,itemStockDO);
-
         //获取活动商品信息
         PromoModel promoModel = promoService.getPromoByItemId(itemModel.getId());
         if(promoModel != null && promoModel.getStatus().intValue() != 3){
@@ -132,6 +150,11 @@ public class ItemServiceImpl implements ItemService {
         return itemModel;
     }
 
+    /***
+     * 根据缓存key获取商品详情
+     * @param id
+     * @return
+     */
     @Override
     public ItemModel getItemByIdInCache(Integer id) {
         ItemModel itemModel = (ItemModel) redisTemplate.opsForValue().get("item_validate_"+id);
@@ -143,8 +166,13 @@ public class ItemServiceImpl implements ItemService {
         return itemModel;
     }
 
-
-
+    /***
+     * 减库存
+     * @param itemId
+     * @param amount
+     * @return
+     * @throws BusinessException
+     */
     @Override
     @Transactional
     public boolean decreaseStock(Integer itemId, Integer amount) throws BusinessException {
@@ -156,7 +184,6 @@ public class ItemServiceImpl implements ItemService {
         }else if(result == 0){
             //打上库存已售罄的标识
             redisTemplate.opsForValue().set("promo_item_stock_invalid_"+itemId,"true");
-
             //更新库存成功
             return true;
         }else{
@@ -164,9 +191,15 @@ public class ItemServiceImpl implements ItemService {
             increaseStock(itemId,amount);
             return false;
         }
-
     }
 
+    /***
+     * 增加库存
+     * @param itemId
+     * @param amount
+     * @return
+     * @throws BusinessException
+     */
     @Override
     public boolean increaseStock(Integer itemId, Integer amount) throws BusinessException {
         redisTemplate.opsForValue().increment("promo_item_stock_"+itemId,amount.intValue());
@@ -179,13 +212,24 @@ public class ItemServiceImpl implements ItemService {
         return mqResult;
     }
 
+    /***
+     * 增加销量
+     * @param itemId
+     * @param amount
+     * @throws BusinessException
+     */
     @Override
     @Transactional
     public void increaseSales(Integer itemId, Integer amount) throws BusinessException {
         itemDOMapper.increaseSales(itemId,amount);
     }
 
-    //初始化对应的库存流水
+    /***
+     * 初始化对应的库存流水
+     * @param itemId
+     * @param amount
+     * @return
+     */
     @Override
     @Transactional
     public String initStockLog(Integer itemId, Integer amount) {
@@ -194,19 +238,22 @@ public class ItemServiceImpl implements ItemService {
         stockLogDO.setAmount(amount);
         stockLogDO.setStockLogId(UUID.randomUUID().toString().replace("-",""));
         stockLogDO.setStatus(1);
-
         stockLogDOMapper.insertSelective(stockLogDO);
-
         return stockLogDO.getStockLogId();
 
     }
 
+    /***
+     * 将商品、库存实体转换为商品模型
+     * @param itemDO
+     * @param itemStockDO
+     * @return
+     */
     private ItemModel convertModelFromDataObject(ItemDO itemDO,ItemStockDO itemStockDO){
         ItemModel itemModel = new ItemModel();
         BeanUtils.copyProperties(itemDO,itemModel);
         itemModel.setPrice(new BigDecimal(itemDO.getPrice()));
         itemModel.setStock(itemStockDO.getStock());
-
         return itemModel;
     }
 

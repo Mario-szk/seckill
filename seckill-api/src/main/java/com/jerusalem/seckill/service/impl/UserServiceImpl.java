@@ -42,6 +42,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /***
+     * 根据id获取用户
+     * @param id
+     * @return
+     */
     @Override
     public UserModel getUserById(Integer id) {
         //调用userdomapper获取到对应的用户dataobject
@@ -51,10 +56,14 @@ public class UserServiceImpl implements UserService {
         }
         //通过用户id获取对应的用户加密密码信息
         UserPasswordDO userPasswordDO = userPasswordDOMapper.selectByUserId(userDO.getId());
-
         return convertFromDataObject(userDO,userPasswordDO);
     }
 
+    /***
+     * 根据缓存key获取用户
+     * @param id
+     * @return
+     */
     @Override
     public UserModel getUserByIdInCache(Integer id) {
         UserModel userModel = (UserModel) redisTemplate.opsForValue().get("user_validate_"+id);
@@ -66,6 +75,11 @@ public class UserServiceImpl implements UserService {
         return userModel;
     }
 
+    /****
+     * 注册
+     * @param userModel
+     * @throws BusinessException
+     */
     @Override
     @Transactional
     public void register(UserModel userModel) throws BusinessException {
@@ -76,9 +90,6 @@ public class UserServiceImpl implements UserService {
         if(result.isHasErrors()){
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,result.getErrMsg());
         }
-
-
-
         //实现model->dataobject方法
         UserDO userDO = convertFromModel(userModel);
         try{
@@ -86,17 +97,20 @@ public class UserServiceImpl implements UserService {
         }catch(DuplicateKeyException ex){
             throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"手机号已重复注册");
         }
-
-
-
         userModel.setId(userDO.getId());
-
         UserPasswordDO userPasswordDO = convertPasswordFromModel(userModel);
         userPasswordDOMapper.insertSelective(userPasswordDO);
 
         return;
     }
 
+    /***
+     * 验证登录
+     * @param telphone 用户注册手机
+     * @param encrptPassword 用户加密后的密码
+     * @return
+     * @throws BusinessException
+     */
     @Override
     public UserModel validateLogin(String telphone, String encrptPassword) throws BusinessException {
         //通过用户的手机获取用户信息
@@ -106,7 +120,6 @@ public class UserServiceImpl implements UserService {
         }
         UserPasswordDO userPasswordDO = userPasswordDOMapper.selectByUserId(userDO.getId());
         UserModel userModel = convertFromDataObject(userDO,userPasswordDO);
-
         //比对用户信息内加密的密码是否和传输进来的密码相匹配
         if(!StringUtils.equals(encrptPassword,userModel.getEncrptPassword())){
             throw new BusinessException(EmBusinessError.USER_LOGIN_FAIL);
@@ -114,7 +127,11 @@ public class UserServiceImpl implements UserService {
         return userModel;
     }
 
-
+    /***
+     * 将用户模型转换为用户密码实体
+     * @param userModel
+     * @return
+     */
     private UserPasswordDO convertPasswordFromModel(UserModel userModel){
         if(userModel == null){
             return null;
@@ -133,6 +150,13 @@ public class UserServiceImpl implements UserService {
 
         return userDO;
     }
+
+    /***
+     * 将用户、密码实体转换为用户模型
+     * @param userDO
+     * @param userPasswordDO
+     * @return
+     */
     private UserModel convertFromDataObject(UserDO userDO, UserPasswordDO userPasswordDO){
         if(userDO == null){
             return null;
@@ -143,7 +167,6 @@ public class UserServiceImpl implements UserService {
         if(userPasswordDO != null){
             userModel.setEncrptPassword(userPasswordDO.getEncrptPassword());
         }
-
         return userModel;
     }
 }
