@@ -70,7 +70,7 @@ public class ItemController extends BaseController {
     }
 
     /***
-     * 获取秒杀商品
+     * 发布秒杀活动
      * @param id
      * @return
      */
