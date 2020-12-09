@@ -1,7 +1,7 @@
 package com.jerusalem.seckill.controller;
 
 import com.google.common.util.concurrent.RateLimiter;
-import com.jerusalem.seckill.mq.MqProducer;
+import com.jerusalem.seckill.rocketmq.MqProducer;
 import com.jerusalem.seckill.service.ItemService;
 import com.jerusalem.seckill.service.OrderService;
 import com.jerusalem.seckill.error.BusinessException;

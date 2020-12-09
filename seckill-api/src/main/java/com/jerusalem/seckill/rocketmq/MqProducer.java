@@ -1,4 +1,4 @@
-package com.jerusalem.seckill.mq;
+package com.jerusalem.seckill.rocketmq;
 
 import com.alibaba.fastjson.JSON;
 import com.jerusalem.seckill.dao.StockLogDOMapper;
@@ -20,8 +20,10 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by hzllb on 2019/2/23.
+/****
+ * RocketMq-生产者配置
+ * @author jerusalem
+ * @date 2020-04-22 20:27:25
  */
 @Component
 public class MqProducer {
@@ -36,16 +38,18 @@ public class MqProducer {
     @Value("${mq.topicname}")
     private String topicName;
 
-
     @Autowired
     private OrderService orderService;
 
     @Autowired
     private StockLogDOMapper stockLogDOMapper;
 
+    /***
+     * 初始化RocketMq生产者配置
+     * @throws MQClientException
+     */
     @PostConstruct
     public void init() throws MQClientException {
-        //做mq producer的初始化
         producer = new DefaultMQProducer("producer_group");
         producer.setNamesrvAddr(nameAddr);
         producer.start();
@@ -98,7 +102,15 @@ public class MqProducer {
         });
     }
 
-    //事务型同步库存扣减消息
+    /***
+     * 事务型同步库存扣减消息
+     * @param userId
+     * @param itemId
+     * @param promoId
+     * @param amount
+     * @param stockLogId
+     * @return
+     */
     public boolean transactionAsyncReduceStock(Integer userId,Integer itemId,Integer promoId,Integer amount,String stockLogId){
         Map<String,Object> bodyMap = new HashMap<>();
         bodyMap.put("itemId",itemId);
@@ -129,10 +141,14 @@ public class MqProducer {
         }else{
             return false;
         }
-
     }
 
-    //同步库存扣减消息
+    /***
+     * 同步库存扣减消息
+     * @param itemId
+     * @param amount
+     * @return
+     */
     public boolean asyncReduceStock(Integer itemId,Integer amount)  {
         Map<String,Object> bodyMap = new HashMap<>();
         bodyMap.put("itemId",itemId);

@@ -24,7 +24,8 @@ spring:
 mybatis:
   mapper-locations: classpath:mapping/*.xml
 
-#rocketmq:
-#  nameserver:
-#    addr: 192.168.75.150:9876
-#  topicname: TopicTest
+#rocketmq自定义配置
+mq:
+  nameserver:
+    addr: 192.168.75.150:9876
+  topicname: stock

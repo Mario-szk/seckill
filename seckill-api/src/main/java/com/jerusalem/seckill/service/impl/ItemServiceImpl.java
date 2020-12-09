@@ -7,7 +7,7 @@ import com.jerusalem.seckill.dataobject.ItemStockDO;
 import com.jerusalem.seckill.dataobject.StockLogDO;
 import com.jerusalem.seckill.error.BusinessException;
 import com.jerusalem.seckill.error.EmBusinessError;
-import com.jerusalem.seckill.mq.MqProducer;
+import com.jerusalem.seckill.rocketmq.MqProducer;
 import com.jerusalem.seckill.model.ItemModel;
 import com.jerusalem.seckill.model.PromoModel;
 import com.jerusalem.seckill.validator.ValidatorImpl;
@@ -206,6 +206,10 @@ public class ItemServiceImpl implements ItemService {
         return true;
     }
 
+
+    /**
+     * 同步库存扣减消息
+     */
     @Override
     public boolean asyncDecreaseStock(Integer itemId, Integer amount) {
         boolean mqResult = mqProducer.asyncReduceStock(itemId,amount);
@@ -240,7 +244,6 @@ public class ItemServiceImpl implements ItemService {
         stockLogDO.setStatus(1);
         stockLogDOMapper.insertSelective(stockLogDO);
         return stockLogDO.getStockLogId();
-
     }
 
     /***
@@ -256,5 +259,4 @@ public class ItemServiceImpl implements ItemService {
         itemModel.setStock(itemStockDO.getStock());
         return itemModel;
     }
-
 }

@@ -1,4 +1,4 @@
-package com.jerusalem.seckill.mq;
+package com.jerusalem.seckill.rocketmq;
 
 import com.alibaba.fastjson.JSON;
 import com.jerusalem.seckill.dao.ItemStockDOMapper;
@@ -17,13 +17,17 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by hzllb on 2019/2/23.
+/****
+ * RocketMq-消费者配置
+ * 监听并消费消息
+ * @author jerusalem
+ * @date 2020-04-22 20:35:22
  */
 @Component
 public class MqConsumer {
 
     private DefaultMQPushConsumer consumer;
+
     @Value("${mq.nameserver.addr}")
     private String nameAddr;
 
@@ -33,6 +37,10 @@ public class MqConsumer {
     @Autowired
     private ItemStockDOMapper itemStockDOMapper;
 
+    /***
+     * 初始化RocketMq消费者配置
+     * @throws MQClientException
+     */
     @PostConstruct
     public void init() throws MQClientException {
         consumer = new DefaultMQPushConsumer("stock_consumer_group");
@@ -53,8 +61,6 @@ public class MqConsumer {
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });
-
         consumer.start();
-
     }
 }
