@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import com.jerusalem.seckill.response.CommonReturnType;
+import com.jerusalem.seckill.utils.CommonReturnType;
 
 /****
  * 全局异常处理器

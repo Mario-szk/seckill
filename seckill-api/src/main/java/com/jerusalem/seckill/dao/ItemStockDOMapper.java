@@ -2,12 +2,14 @@ package com.jerusalem.seckill.dao;
 
 import com.jerusalem.seckill.dataobject.ItemStockDO;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 /****
  * 持久层
  * @author jerusalem
  * @date 2020-04-15 08:30:52
  */
+@Repository
 public interface ItemStockDOMapper {
 
     int deleteByPrimaryKey(Integer id);

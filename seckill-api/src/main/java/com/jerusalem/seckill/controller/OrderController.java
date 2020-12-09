@@ -6,7 +6,7 @@ import com.jerusalem.seckill.service.ItemService;
 import com.jerusalem.seckill.service.OrderService;
 import com.jerusalem.seckill.error.BusinessException;
 import com.jerusalem.seckill.error.EmBusinessError;
-import com.jerusalem.seckill.response.CommonReturnType;
+import com.jerusalem.seckill.utils.CommonReturnType;
 import com.jerusalem.seckill.service.PromoService;
 import com.jerusalem.seckill.model.UserModel;
 import com.jerusalem.seckill.utils.CodeUtil;
@@ -56,6 +56,11 @@ public class OrderController extends BaseController {
 
     private RateLimiter orderCreateRateLimiter;
 
+    /***
+     * 同步调用线程池的submit方法
+     * 拥塞窗口为20的等待队列，实现队列泄洪
+     * 限流
+     */
     @PostConstruct
     public void init(){
         executorService = Executors.newFixedThreadPool(20);

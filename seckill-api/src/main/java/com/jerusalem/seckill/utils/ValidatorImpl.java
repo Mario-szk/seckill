@@ -1,4 +1,4 @@
-package com.jerusalem.seckill.validator;
+package com.jerusalem.seckill.utils;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -8,8 +8,11 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.Set;
 
-/**
- * Created by hzllb on 2018/11/18.
+/****
+ * 实现验证
+ * @author jerusalem
+ * @email 3276586184@qq.com
+ * @date 2020-04-14 10:44:58
  */
 @Component
 public class ValidatorImpl implements InitializingBean{
@@ -31,7 +34,6 @@ public class ValidatorImpl implements InitializingBean{
         }
         return result;
     }
-
 
     @Override
     public void afterPropertiesSet() throws Exception {

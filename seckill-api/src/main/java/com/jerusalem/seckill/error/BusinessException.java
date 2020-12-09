@@ -1,9 +1,11 @@
 package com.jerusalem.seckill.error;
 
-/**
- * Created by hzllb on 2018/11/13.
+/****
+ * 包装器业务异常类实现
+ * @author jerusalem
+ * @email 3276586184@qq.com
+ * @date 2020-04-15 16:28:19
  */
-//包装器业务异常类实现
 public class BusinessException extends Exception implements CommonError {
 
     private CommonError commonError;
@@ -20,9 +22,6 @@ public class BusinessException extends Exception implements CommonError {
         this.commonError = commonError;
         this.commonError.setErrMsg(errMsg);
     }
-
-
-
 
 
     @Override

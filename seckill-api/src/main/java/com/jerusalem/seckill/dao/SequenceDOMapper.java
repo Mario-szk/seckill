@@ -1,12 +1,14 @@
 package com.jerusalem.seckill.dao;
 
 import com.jerusalem.seckill.dataobject.SequenceDO;
+import org.springframework.stereotype.Repository;
 
 /****
  * 持久层
  * @author jerusalem
  * @date 2020-04-15 08:30:52
  */
+@Repository
 public interface SequenceDOMapper {
 
     int deleteByPrimaryKey(String name);

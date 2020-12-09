@@ -14,7 +14,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 /****
- *
+ * 验证码生成技术
  * @author jerusalem
  * @email 3276586184@qq.com
  * @date 2020-04-18 12:01:59
@@ -85,13 +85,5 @@ public class CodeUtil {
         //存放生成的验证码BufferedImage对象
         map.put("codePic", buffImg);
         return map;
-    }
-
-    public static void main(String[] args) throws Exception {
-        //创建文件输出流对象
-        OutputStream out = new FileOutputStream("/Users/hzllb/Desktop/javaworkspace/miaoshaStable/"+System.currentTimeMillis()+".jpg");
-        Map<String,Object> map = CodeUtil.generateCodeAndPic();
-        ImageIO.write((RenderedImage) map.get("codePic"), "jpeg", out);
-        System.out.println("验证码的值为："+map.get("code"));
     }
 }

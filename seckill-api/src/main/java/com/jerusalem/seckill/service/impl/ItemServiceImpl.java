@@ -10,11 +10,11 @@ import com.jerusalem.seckill.error.EmBusinessError;
 import com.jerusalem.seckill.rocketmq.MqProducer;
 import com.jerusalem.seckill.model.ItemModel;
 import com.jerusalem.seckill.model.PromoModel;
-import com.jerusalem.seckill.validator.ValidatorImpl;
+import com.jerusalem.seckill.utils.ValidatorImpl;
 import com.jerusalem.seckill.dao.ItemStockDOMapper;
 import com.jerusalem.seckill.service.ItemService;
 import com.jerusalem.seckill.service.PromoService;
-import com.jerusalem.seckill.validator.ValidationResult;
+import com.jerusalem.seckill.utils.ValidationResult;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

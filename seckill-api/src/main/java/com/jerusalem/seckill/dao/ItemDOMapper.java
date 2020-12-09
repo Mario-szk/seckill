@@ -1,7 +1,10 @@
 package com.jerusalem.seckill.dao;
 
 import com.jerusalem.seckill.dataobject.ItemDO;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 /****
@@ -9,6 +12,7 @@ import java.util.List;
  * @author jerusalem
  * @date 2020-04-15 08:30:52
  */
+@Repository
 public interface ItemDOMapper {
 
     List<ItemDO> listItem();

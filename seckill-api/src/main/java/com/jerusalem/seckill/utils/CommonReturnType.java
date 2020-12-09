@@ -1,8 +1,14 @@
-package com.jerusalem.seckill.response;
+package com.jerusalem.seckill.utils;
 
-/**
- * Created by hzllb on 2018/11/13.
+import lombok.Data;
+
+/****
+ * 返回数据信息封装
+ * @author jerusalem
+ * @email 3276586184@qq.com
+ * @date 2020-04-12 15:22:02
  */
+@Data
 public class CommonReturnType {
     //表明对应请求的返回处理结果 "success" 或 "fail"
     private String status;
@@ -21,21 +27,5 @@ public class CommonReturnType {
         type.setStatus(status);
         type.setData(result);
         return type;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
     }
 }

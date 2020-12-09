@@ -1,12 +1,15 @@
-package com.jerusalem.seckill.validator;
+package com.jerusalem.seckill.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by hzllb on 2018/11/18.
+/****
+ * 验证结果封装
+ * @author jerusalem
+ * @email 3276586184@qq.com
+ * @date 2020-04-14 09:27:02
  */
 public class ValidationResult {
     //校验结果是否有错
@@ -14,9 +17,6 @@ public class ValidationResult {
 
     //存放错误信息的map
     private Map<String,String> errorMsgMap = new HashMap<>();
-
-
-
 
     public boolean isHasErrors() {
         return hasErrors;
@@ -33,7 +33,6 @@ public class ValidationResult {
     public void setErrorMsgMap(Map<String, String> errorMsgMap) {
         this.errorMsgMap = errorMsgMap;
     }
-
 
     //实现通用的通过格式化字符串信息获取错误结果的msg方法
     public String getErrMsg(){

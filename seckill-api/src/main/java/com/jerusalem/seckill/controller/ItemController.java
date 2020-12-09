@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.jerusalem.seckill.vo.ItemVO;
 import com.jerusalem.seckill.error.BusinessException;
-import com.jerusalem.seckill.response.CommonReturnType;
+import com.jerusalem.seckill.utils.CommonReturnType;
 import com.jerusalem.seckill.service.CacheService;
 import com.jerusalem.seckill.service.PromoService;
 import com.jerusalem.seckill.model.ItemModel;
@@ -15,7 +15,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.jerusalem.seckill.service.ItemService;
